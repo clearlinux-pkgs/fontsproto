@@ -4,7 +4,7 @@
 #
 Name     : fontsproto
 Version  : 2.1.3
-Release  : 6
+Release  : 7
 URL      : http://xorg.freedesktop.org/releases/individual/proto/fontsproto-2.1.3.tar.gz
 Source0  : http://xorg.freedesktop.org/releases/individual/proto/fontsproto-2.1.3.tar.gz
 Summary  : Fonts extension headers
@@ -12,6 +12,7 @@ Group    : Development/Tools
 License  : MIT-Opengroup
 Requires: fontsproto-doc
 BuildRequires : libxslt-bin
+BuildRequires : pkgconfig(xorg-macros)
 BuildRequires : xmlto
 
 %description
@@ -22,6 +23,7 @@ Xorg mailing list:
 %package dev
 Summary: dev components for the fontsproto package.
 Group: Development
+Provides: fontsproto-devel
 
 %description dev
 dev components for the fontsproto package.
@@ -39,10 +41,15 @@ doc components for the fontsproto package.
 %setup -q -n fontsproto-2.1.3
 
 %build
+export LANG=C
 %configure --disable-static
-make V=1 %{?_smp_mflags}
+make V=1  %{?_smp_mflags}
 
 %check
+export LANG=C
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
@@ -60,7 +67,7 @@ rm -rf %{buildroot}
 /usr/include/X11/fonts/fontproto.h
 /usr/include/X11/fonts/fontstruct.h
 /usr/include/X11/fonts/fsmasks.h
-/usr/lib64/pkgconfig/*.pc
+/usr/lib64/pkgconfig/fontsproto.pc
 
 %files doc
 %defattr(-,root,root,-)
